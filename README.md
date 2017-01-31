@@ -1,6 +1,6 @@
 # README #
 
-Lottery program for command line.
+Lottery program working in command line.
 
 ### What is this repository for? ###
 
