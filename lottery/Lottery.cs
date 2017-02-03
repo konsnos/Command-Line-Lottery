@@ -10,6 +10,8 @@ namespace lottery
         ListController giftsList;
         string dir;
         string resultsPath;
+        string namesPath;
+        string giftsPath;
 
         const int PICK_WINNER_DURATION = 5;
         const float PICK_DURATION_CHANGE = 0.05f;
@@ -24,8 +26,8 @@ namespace lottery
         {
             // initialize directory folder
             dir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string namesPath = dir + @"\names.txt";
-            string giftsPath = dir + @"\gifts.txt";
+            namesPath = dir + @"\names.txt";
+            giftsPath = dir + @"\gifts.txt";
             resultsPath = dir + @"\result.txt";
 
             namesList = new ListController(namesPath);
@@ -52,8 +54,8 @@ namespace lottery
                 long lastTs = DateTime.Now.Ticks + (long)(TimeSpan.TicksPerSecond * PICK_DURATION_CHANGE);
                 int nameIndex = namesList.GetRandom();
                 string nameStr = namesList.GetName(nameIndex);
-                int nameStrLength = nameStr.Length + 3;
-                Console.Write(nameStr + "   ");
+                int nameStrLength = nameStr.Length;
+                Console.Write(nameStr);
 
                 while(DateTime.Now.Ticks < pickAtTicks)
                 {
@@ -74,37 +76,70 @@ namespace lottery
                 Console.WriteLine("1. Received");
                 Console.WriteLine("2. Not Received");
                 Console.WriteLine("3. Absent");
-                
-                bool pickedChoice = false;
-                while(!pickedChoice)
+
                 {
-                    Console.Write("Enter choice: ");
-                    int choice;
-                    if(Int32.TryParse(Console.ReadLine(), out choice))
+                    bool pickedChoice = false;
+                    while (!pickedChoice)
                     {
-                        switch (choice)
+                        Console.Write("Enter choice: ");
+                        int choice;
+                        if (Int32.TryParse(Console.ReadLine(), out choice))
                         {
-                            case 1:
-                                grantGift(nameIndex, giftIndex);
-                                pickedChoice = true;
-                                break;
-                            case 2:
-                                pickedChoice = true;
-                                break;
-                            case 3:
-                                namesList.RemoveIndex(nameIndex);
-                                pickedChoice = true;
-                                break;
-                            default:
-                                Console.WriteLine("Uknown command:" + choice);
-                                break;
+                            switch (choice)
+                            {
+                                case 1:
+                                    grantGift(nameIndex, giftIndex);
+                                    pickedChoice = true;
+                                    break;
+                                case 2:
+                                    pickedChoice = true;
+                                    break;
+                                case 3:
+                                    namesList.RemoveIndex(nameIndex);
+                                    pickedChoice = true;
+                                    break;
+                                default:
+                                    Console.WriteLine("Uknown command:" + choice);
+                                    break;
+                            }
                         }
                     }
                 }
-                
 
                 Console.WriteLine();
                 Console.WriteLine();
+
+                if(giftsList.GetRemainingCount() > 0 && namesList.GetRemainingCount() <= 0)
+                {
+                    Console.WriteLine("Names were exhausted, but there are still " + giftsList.GetRemainingCount() + " gifts. Repopulate list?");
+                    Console.WriteLine("1. Yes");
+                    Console.WriteLine("2. No");
+
+                    bool pickedChoice = false;
+                    while (!pickedChoice)
+                    {
+                        Console.Write("Enter choice: ");
+                        int choice;
+                        if (Int32.TryParse(Console.ReadLine(), out choice))
+                        {
+                            switch (choice)
+                            {
+                                case 1:
+                                    namesList = new ListController(namesPath);
+                                    pickedChoice = true;
+                                    break;
+                                case 2:
+                                    pickedChoice = true;
+                                    break;
+                                default:
+                                    Console.WriteLine("Uknown command:" + choice);
+                                    break;
+                            }
+                        }
+                    }
+                    
+                    Console.WriteLine();
+                }
             }
 
             Console.WriteLine("Congratulations!");
