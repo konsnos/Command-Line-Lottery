@@ -47,7 +47,7 @@ namespace lottery
                     Thread.Sleep(250);
                 Console.ReadKey(true);
 
-                Console.Write("Winner: ");
+                Console.WriteLine("Winner: ");
 
                 long pickAtTicks = DateTime.Now.Ticks + (TimeSpan.TicksPerSecond * PICK_WINNER_DURATION);
 
@@ -61,8 +61,9 @@ namespace lottery
                 {
                     if(DateTime.Now.Ticks > lastTs)
                     {
-                        for (int i = 0; i < nameStrLength; i++)
-                            Console.Write("\b");
+                        ClearCurrentConsoleLine();
+                        /*for (int i = 0; i < nameStrLength; i++)
+                            Console.Write("\b");*/
 
                         lastTs = DateTime.Now.Ticks + (long)(TimeSpan.TicksPerSecond * PICK_DURATION_CHANGE);
                         nameIndex = namesList.GetRandom();
@@ -159,6 +160,14 @@ namespace lottery
             // remove from list
             namesList.RemoveIndex(nameIndex);
             giftsList.RemoveIndex(giftIndex);
+        }
+
+        public static void ClearCurrentConsoleLine()
+        {
+            int currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, currentLineCursor);
         }
     }
 }
