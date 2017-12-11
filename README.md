@@ -11,3 +11,9 @@ Requires two txt files in the executable folder.
 ### How do I get set up? ###
 
 The project was developed using Microsoft Visual Studio 2015
+
+### Example Use ###
+![names](./showcase/names.png)
+![gifts](./shocase/gifts.png)
+![running](./showcase/example.gif)
+![results](./showcase/results.png)
